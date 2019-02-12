@@ -9,7 +9,8 @@
 // Project Name  : dpu_v_1
 // Target Devices: KU115
 // Tool Versions : vivado 2017.3
-// Description   : receive wirte request to a specific group of memory //                 pool from conv, dataloader, misc, then write data
+// Description   : receive wirte request to a specific group of memory 
+//                 pool from conv, dataloader, misc, then write data
 //                 to this group
 // Dependencies  : utilized by write_control
 //                 contains my_mux(logic), my_mask(logic)
@@ -57,7 +58,7 @@ module write_arbiter #(
     output                   load_write_ready_o,
     
     // connect with image memory pool
-    input  [DATA_WIDTH -1:0] ram_write_data_o,
+    output [DATA_WIDTH -1:0] ram_write_data_o,
     output [ADDR_WIDTH -1:0] ram_write_addr_o,
     output [ROW_PARA   -1:0] ram_write_bank_en_o
 );
