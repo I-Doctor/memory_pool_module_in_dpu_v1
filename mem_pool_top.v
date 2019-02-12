@@ -93,9 +93,11 @@ module mem_pool_top #(
     output [BIAS_DATA_WIDTH -1:0] bias_read_data_o,
     // weights(weight&bias) write port with Load
     input                         weight_write_en_i,
+    input  [WEIT_BANK_NUM   -1:0] weight_write_bank_i,
     input  [WEIT_ADDR_WIDTH -1:0] weight_write_addr_i,
     input  [WEIT_DATA_WIDTH -1:0] weight_write_data_i,
     input                         bias_write_en_i,
+    input  [BIAS_BANK_NUM   -1:0] bias_write_bank_i,
     input  [BIAS_ADDR_WIDTH -1:0] bias_write_addr_i,
     input  [BIAS_DATA_WIDTH -1:0] bias_write_data_i
 );
@@ -272,6 +274,27 @@ endgenerate
 //*******************************************************************
 // utilize and connect weight group
 //*******************************************************************
+wire [WEIT_BANK_NUM -1:0] weight_write_bank_en;
+wire [BIAS_BANK_NUM -1:0] bias_write_bank_en;
+
+my_mux #(
+    .DATA_WIDTH (WEIT_BANK_NUM),
+    .CTRL_WIDTH (1)
+) INST_weit_bank_en(
+    .input_data (weight_write_bank_i),
+    .input_ctrl (weight_write_en_i),
+    .output_data(weight_write_bank_en)
+);
+
+my_mux #(
+    .DATA_WIDTH (BIAS_BANK_NUM),
+    .CTRL_WIDTH (1)
+) INST_bias_bank_en(
+    .input_data (bias_write_bank_i),
+    .input_ctrl (bias_write_en_i),
+    .output_data(bias_write_bank_en)
+);
+
 bram_group #(
     .BANK_NUM           (WEIT_BANK_NUM),
     .BANK_UNIT_NUM      (WEIT_UNIT_NUM),
@@ -281,9 +304,9 @@ bram_group #(
     .clk(clk),
     .rst_p(rst_p),
 
-    .write_bank_en_i ({WEIT_BANK_NUM{weight_write_en_i  }}),
+    .write_bank_en_i (               weight_write_bank_en ),
     .write_addr_i    ({WEIT_BANK_NUM{weight_write_addr_i}}),
-    .write_data_i    (               weight_write_data_i ),
+    .write_data_i    (               weight_write_data_i  ),
     
     .read_bank_en_i  ({WEIT_BANK_NUM{weight_read_en_i   }}),
     .read_addr_i     ({WEIT_BANK_NUM{weight_read_addr_i }}),
@@ -303,9 +326,9 @@ bram_group #(
     .clk(clk),
     .rst_p(rst_p),
 
-    .write_bank_en_i ({BIAS_BANK_NUM{bias_write_en_i  }}),
+    .write_bank_en_i (               bias_write_bank_en ),
     .write_addr_i    ({BIAS_BANK_NUM{bias_write_addr_i}}),
-    .write_data_i    (               bias_write_data_i ),
+    .write_data_i    (               bias_write_data_i  ),
     
     .read_bank_en_i  ({BIAS_BANK_NUM{bias_read_en_i   }}),
     .read_addr_i     ({BIAS_BANK_NUM{bias_read_addr_i }}),

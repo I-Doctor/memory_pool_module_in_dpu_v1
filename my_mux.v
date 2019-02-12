@@ -53,15 +53,21 @@ generate
     begin: or_gates //generator name: or gates
         assign output_data =  and_result [3*DATA_WIDTH-1:2*DATA_WIDTH]
                             | and_result [2*DATA_WIDTH-1:1*DATA_WIDTH]
-                            | and_result [2*DATA_WIDTH-1:0*DATA_WIDTH];
+                            | and_result [1*DATA_WIDTH-1:0*DATA_WIDTH];
     end
     else if (CTRL_WIDTH == 4)
     begin
         assign output_data =  and_result [4*DATA_WIDTH-1:3*DATA_WIDTH]
                             | and_result [3*DATA_WIDTH-1:2*DATA_WIDTH]
                             | and_result [2*DATA_WIDTH-1:1*DATA_WIDTH]
-                            | and_result [2*DATA_WIDTH-1:0*DATA_WIDTH];
+                            | and_result [1*DATA_WIDTH-1:0*DATA_WIDTH];
     end
+    else if (CTRL_WIDTH == 1)
+    begin
+        assign output_data =  and_result [DATA_WIDTH-1:0];
+                            
+    end
+
 endgenerate
 
 
