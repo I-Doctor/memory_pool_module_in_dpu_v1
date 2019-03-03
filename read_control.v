@@ -20,7 +20,7 @@
 // Modification History:
 // Date by Version Change Description
 //=====================================================================
-// 2019.03.03    : change input and output localparam
+// 2019.03.03    : solve input and output localparam problem
 // 
 //=====================================================================
 //
@@ -37,36 +37,36 @@ module read_control #(
     input rst_p,
 
    // image read port with Conv
-    input  [IMG_GRP_NUM    -1:0] conv_read_group_id_i,
-    input  [ROW_PARA       -1:0] conv_read_bank_en_i,
-    input  [ROW_PARA* BANK_ADDR_WIDTH -1:0] conv_read_addr_i,
-    output                       conv_read_addr_ready_o,
-    output                       conv_read_data_valid_o,
-    output [IMG_DATA_WIDTH -1:0] conv_read_data_o,
-    input                        conv_read_data_ready_i,
+    input  [IMG_GRP_NUM              -1:0] conv_read_group_id_i,
+    input  [ROW_PARA                 -1:0] conv_read_bank_en_i,
+    input  [ROW_PARA*BANK_ADDR_WIDTH -1:0] conv_read_addr_i,
+    output                                 conv_read_addr_ready_o,
+    output                                 conv_read_data_valid_o,
+    output [ROW_PARA*BANK_UNIT_WIDTH*CHL_PARA -1:0] conv_read_data_o,
+    input                                  conv_read_data_ready_i,
 
     // image read port with MISC
-    input  [IMG_GRP_NUM    -1:0] misc_read_group_id_i,
-    input  [ROW_PARA       -1:0] misc_read_bank_en_i,
-    input  [ROW_PARA* BANK_ADDR_WIDTH -1:0] misc_read_addr_i,
-    output                       misc_read_addr_ready_o,
-    output                       misc_read_data_valid_o,
-    output [IMG_DATA_WIDTH -1:0] misc_read_data_o,
-    input                        misc_read_data_ready_i,
+    input  [IMG_GRP_NUM              -1:0] misc_read_group_id_i,
+    input  [ROW_PARA                 -1:0] misc_read_bank_en_i,
+    input  [ROW_PARA*BANK_ADDR_WIDTH -1:0] misc_read_addr_i,
+    output                                 misc_read_addr_ready_o,
+    output                                 misc_read_data_valid_o,
+    output [ROW_PARA*BANK_UNIT_WIDTH*CHL_PARA -1:0] misc_read_data_o,
+    input                                  misc_read_data_ready_i,
     
     // image read port with Save
-    input  [IMG_GRP_NUM    -1:0] save_read_group_id_i,
-    input  [ROW_PARA       -1:0] save_read_bank_en_i,
-    input  [ROW_PARA* BANK_ADDR_WIDTH -1:0] save_read_addr_i,
-    output                       save_read_addr_ready_o,
-    output                       save_read_data_valid_o,
-    output [IMG_DATA_WIDTH -1:0] save_read_data_o,
-    input                        save_read_data_ready_i,
+    input  [IMG_GRP_NUM              -1:0] save_read_group_id_i,
+    input  [ROW_PARA                 -1:0] save_read_bank_en_i,
+    input  [ROW_PARA*BANK_ADDR_WIDTH -1:0] save_read_addr_i,
+    output                                 save_read_addr_ready_o,
+    output                                 save_read_data_valid_o,
+    output [ROW_PARA*BANK_UNIT_WIDTH*CHL_PARA -1:0] save_read_data_o,
+    input                                  save_read_data_ready_i,
     
     // image read port with image memory pool (packaged)
-    input  [IMG_GRP_NUM * IMG_DATA_WIDTH -1:0] read_data_i,
-    output [IMG_GRP_NUM * ROW_PARA* BANK_ADDR_WIDTH -1:0] read_addr_o,
-    output [IMG_GRP_NUM * IMG_BANK_NUM   -1:0] read_bank_en_o
+    input  [IMG_GRP_NUM*ROW_PARA*BANK_UNIT_WIDTH*CHL_PARA -1:0] read_data_i,
+    output [IMG_GRP_NUM*ROW_PARA*BANK_ADDR_WIDTH          -1:0] read_addr_o,
+    output [IMG_GRP_NUM*ROW_PARA                          -1:0] read_bank_en_o
 
     );
 

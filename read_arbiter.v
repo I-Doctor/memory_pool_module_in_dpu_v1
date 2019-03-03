@@ -9,7 +9,8 @@
 // Project Name  : dpu_v_1
 // Target Devices: KU115
 // Tool Versions : vivado 2017.1
-// Description   : receive read request to a specific group of memory //                 pool from conv, datasaver, misc, then read data
+// Description   : receive read request to a specific group of memory 
+//                 pool from conv, datasaver, misc, then read data
 //                 from this group and send data back
 // Dependencies  : utilized by read_control
 //                 contains my_mux(logic), my_mask(logic)
@@ -17,9 +18,9 @@
 // Revision      :
 // Modification History:
 // Date by Version Change Description
-//====================================
+//=====================================================================
 //
-//====================================
+//=====================================================================
 //
 ///////////////////////////////////////////////////////////////////////
 module read_arbiter #(

@@ -8,17 +8,19 @@
 // Module Name   : bram_group
 // Project Name  : dpu_v_1
 // Target Devices: KU115
-// Tool Versions : vivado 2017.3
-// Description   : receive read request to a specific group of memory //                 pool from conv, datasaver, misc then read data from //                 the group and send data out
+// Tool Versions : vivado 2017.1
+// Description   : receive read request to a specific group of memory 
+//                 pool from conv, datasaver, misc then read data from 
+//                 the group and send data out
 // Dependencies  : utilized by mem_pool_top
 //                 contains xpm_mempory_sdpram(ip)
 //
 // Revision      :
 // Modification History:
 // Date by Version Change Description
-//====================================
+//=====================================================================
 //
-//====================================
+//=====================================================================
 //
 ///////////////////////////////////////////////////////////////////////
 module bram_group #(

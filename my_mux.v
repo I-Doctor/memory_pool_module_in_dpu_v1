@@ -4,11 +4,11 @@
 // Engineer: Kai Zhong
 // Email   : zhongk15@mails.tsinghua.edu.cn
 //
-// Create Date   : 2018.01.16
+// Create Date   : 2019.01.16
 // Module Name   : my_mux
 // Project Name  : dpu_v_1
 // Target Devices: KU115
-// Tool Versions : vivado 2017.3
+// Tool Versions : vivado 2017.1
 // Description   : it work as normal mux but its ctrl signal is
 //                 one-hot form so we use logic operation "and",
 //                 "or" to implement 
@@ -17,9 +17,9 @@
 // Revision      :
 // Modification History:
 // Date by Version Change Description
-//====================================
+//=====================================================================
 //
-//====================================
+//=====================================================================
 //
 ///////////////////////////////////////////////////////////////////////
 module my_mux #(

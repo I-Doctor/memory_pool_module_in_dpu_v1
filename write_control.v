@@ -8,7 +8,7 @@
 // Module Name   : write_control
 // Project Name  : dpu_v_1
 // Target Devices: KU115
-// Tool Versions : vivado 2017.3
+// Tool Versions : vivado 2017.1
 // Description   : receive write request to on-chip memory pool 
 //                 from conv, dataloader, misc and send data to the 
 //                 right group and right bank of on-chip memory pool
@@ -18,9 +18,10 @@
 // Revision      :
 // Modification History:
 // Date by Version Change Description
-//====================================
+//=====================================================================
+// 2019.03.03    : solve input and output localparam problem
 //
-//====================================
+//=====================================================================
 //
 ///////////////////////////////////////////////////////////////////////
 module write_control #(
@@ -35,30 +36,30 @@ module write_control #(
     input rst_p,
 
     // image write port with Conv
-    input [IMG_GRP_NUM    -1:0] conv_write_group_id_i,
-    input [IMG_BANK_NUM   -1:0] conv_write_bank_en_i,
-    input [IMG_ADDR_WIDTH -1:0] conv_write_addr_i,
-    input [IMG_DATA_WIDTH -1:0] conv_write_data_i,
-    output                      conv_write_ready_o,
+    input [IMG_GRP_NUM              -1:0] conv_write_group_id_i,
+    input [ROW_PARA                 -1:0] conv_write_bank_en_i,
+    input [ROW_PARA*BANK_ADDR_WIDTH -1:0] conv_write_addr_i,
+    input [ROW_PARA*BANK_UNIT_WIDTH*CHL_PARA -1:0] conv_write_data_i,
+    output                                conv_write_ready_o,
 
     // image write port with MISC
-    input [IMG_GRP_NUM    -1:0] misc_write_group_id_i,
-    input [IMG_BANK_NUM   -1:0] misc_write_bank_en_i,
-    input [IMG_ADDR_WIDTH -1:0] misc_write_addr_i,
-    input [IMG_DATA_WIDTH -1:0] misc_write_data_i,
-    output                      misc_write_ready_o,
+    input [IMG_GRP_NUM              -1:0] misc_write_group_id_i,
+    input [ROW_PARA                 -1:0] misc_write_bank_en_i,
+    input [ROW_PARA*BANK_ADDR_WIDTH -1:0] misc_write_addr_i,
+    input [ROW_PARA*BANK_UNIT_WIDTH*CHL_PARA -1:0] misc_write_data_i,
+    output                                misc_write_ready_o,
     
     // image write port with Load
-    input [IMG_GRP_NUM    -1:0] load_write_group_id_i,
-    input [IMG_BANK_NUM   -1:0] load_write_bank_en_i,
-    input [IMG_ADDR_WIDTH -1:0] load_write_addr_i,
-    input [IMG_DATA_WIDTH -1:0] load_write_data_i,
-    output                      load_write_ready_o,
+    input [IMG_GRP_NUM              -1:0] load_write_group_id_i,
+    input [ROW_PARA                 -1:0] load_write_bank_en_i,
+    input [ROW_PARA*BANK_ADDR_WIDTH -1:0] load_write_addr_i,
+    input [ROW_PARA*BANK_UNIT_WIDTH*CHL_PARA -1:0] load_write_data_i,
+    output                                load_write_ready_o,
     
     // image write port with image memory pool (packaged)
-    output [IMG_GRP_NUM * IMG_DATA_WIDTH -1:0] write_data_o,
-    output [IMG_GRP_NUM * IMG_ADDR_WIDTH -1:0] write_addr_o,
-    output [IMG_GRP_NUM * IMG_BANK_NUM   -1:0] write_bank_en_o
+    output [IMG_GRP_NUM*ROW_PARA*BANK_UNIT_WIDTH*CHL_PARA-1:0] write_data_o,
+    output [IMG_GRP_NUM*ROW_PARA*BANK_ADDR_WIDTH -1:0] write_addr_o,
+    output [IMG_GRP_NUM*ROW_PARA                 -1:0] write_bank_en_o
 );
 
 //*******************************************************************

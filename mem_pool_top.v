@@ -14,14 +14,14 @@
 //                 There are read and write control to schedule the
 //                 image groups, and weight control to control others 
 // Dependencies  : utilized by dpu_top
-//                 contains read_control, write_control, 
-//                 bram_group
-//                 parametered by dpu_top and 
+//                 contains read_control, write_control, bram_group
+//                 parametered by dpu_top
 // Revision      :
 // Modification History:
 // Date by Version Change Description
 //=====================================================================
-// 2019.03.01    : correct wires connection
+// 2019.02.16    : correct wires connection
+// 2019.03.03    : solve input and output localparam problem 
 //
 //=====================================================================
 //
@@ -40,67 +40,67 @@ module mem_pool_top #(
 
     // IMAGE read 
     // image read port with Conv
-    input  [IMG_GRP_NUM    -1:0] conv_read_group_id_i,
-    input  [IMG_BANK_NUM   -1:0] conv_read_bank_en_i,
-    input  [IMG_ADDR_WIDTH -1:0] conv_read_addr_i,
-    output                       conv_read_addr_ready_o,
-    output                       conv_read_data_valid_o,
-    output [IMG_DATA_WIDTH -1:0] conv_read_data_o,
-    input                        conv_read_data_ready_i,
+    input [IMG_GRP_NUM              -1:0] conv_read_group_id_i,
+    input [ROW_PARA                 -1:0] conv_read_bank_en_i,
+    input [ROW_PARA*BANK_ADDR_WIDTH -1:0] conv_read_addr_i,
+    output                                conv_read_addr_ready_o,
+    output                                conv_read_data_valid_o,
+    output[ROW_PARA*BANK_UNIT_WIDTH*CHL_PARA -1:0] conv_read_data_o,
+    input                                 conv_read_data_ready_i,
     // image read port with MISC
-    input  [IMG_GRP_NUM    -1:0] misc_read_group_id_i,
-    input  [IMG_BANK_NUM   -1:0] misc_read_bank_en_i,
-    input  [IMG_ADDR_WIDTH -1:0] misc_read_addr_i,
-    output                       misc_read_addr_ready_o,
-    output                       misc_read_data_valid_o,
-    output [IMG_DATA_WIDTH -1:0] misc_read_data_o,
-    input                        misc_read_data_ready_i,
+    input [IMG_GRP_NUM              -1:0] misc_read_group_id_i,
+    input [ROW_PARA                 -1:0] misc_read_bank_en_i,
+    input [ROW_PARA*BANK_ADDR_WIDTH -1:0] misc_read_addr_i,
+    output                                misc_read_addr_ready_o,
+    output                                misc_read_data_valid_o,
+    output[ROW_PARA*BANK_UNIT_WIDTH*CHL_PARA -1:0] misc_read_data_o,
+    input                                 misc_read_data_ready_i,
     // image read port with Save
-    input  [IMG_GRP_NUM    -1:0] save_read_group_id_i,
-    input  [IMG_BANK_NUM   -1:0] save_read_bank_en_i,
-    input  [IMG_ADDR_WIDTH -1:0] save_read_addr_i,
-    output                       save_read_addr_ready_o,
-    output                       save_read_data_valid_o,
-    output [IMG_DATA_WIDTH -1:0] save_read_data_o,
-    input                        save_read_data_ready_i,
+    input [IMG_GRP_NUM              -1:0] save_read_group_id_i,
+    input [ROW_PARA                 -1:0] save_read_bank_en_i,
+    input [ROW_PARA*BANK_ADDR_WIDTH -1:0] save_read_addr_i,
+    output                                save_read_addr_ready_o,
+    output                                save_read_data_valid_o,
+    output[ROW_PARA*BANK_UNIT_WIDTH*CHL_PARA -1:0] save_read_data_o,
+    input                                 save_read_data_ready_i,
 
     // IMAGE write
     // image write port with Conv
-    input  [IMG_GRP_NUM    -1:0] conv_write_group_id_i,
-    input  [IMG_BANK_NUM   -1:0] conv_write_bank_en_i,
-    input  [IMG_ADDR_WIDTH -1:0] conv_write_addr_i,
-    input  [IMG_DATA_WIDTH -1:0] conv_write_data_i,
-    output                       conv_write_ready_o,
+    input [IMG_GRP_NUM              -1:0] conv_write_group_id_i,
+    input [ROW_PARA                 -1:0] conv_write_bank_en_i,
+    input [ROW_PARA*BANK_ADDR_WIDTH -1:0] conv_write_addr_i,
+    input [ROW_PARA*BANK_UNIT_WIDTH*CHL_PARA -1:0] conv_write_data_i,
+    output                                conv_write_ready_o,
     // image write port with MISC
-    input  [IMG_GRP_NUM    -1:0] misc_write_group_id_i,
-    input  [IMG_BANK_NUM   -1:0] misc_write_bank_en_i,
-    input  [IMG_ADDR_WIDTH -1:0] misc_write_addr_i,
-    input  [IMG_DATA_WIDTH -1:0] misc_write_data_i,
-    output                       misc_write_ready_o,
+    input [IMG_GRP_NUM              -1:0] misc_write_group_id_i,
+    input [ROW_PARA                 -1:0] misc_write_bank_en_i,
+    input [ROW_PARA*BANK_ADDR_WIDTH -1:0] misc_write_addr_i,
+    input [ROW_PARA*BANK_UNIT_WIDTH*CHL_PARA -1:0] misc_write_data_i,
+    output                                misc_write_ready_o,
     // image write port with Load
-    input  [IMG_GRP_NUM    -1:0] load_write_group_id_i,
-    input  [IMG_BANK_NUM   -1:0] load_write_bank_en_i,
-    input  [IMG_ADDR_WIDTH -1:0] load_write_addr_i,
-    input  [IMG_DATA_WIDTH -1:0] load_write_data_i,
-    output                       load_write_ready_o,
+    input [IMG_GRP_NUM              -1:0] load_write_group_id_i,
+    input [ROW_PARA                 -1:0] load_write_bank_en_i,
+    input [ROW_PARA*BANK_ADDR_WIDTH -1:0] load_write_addr_i,
+    input [ROW_PARA*BANK_UNIT_WIDTH*CHL_PARA -1:0] load_write_data_i,
+    output                                load_write_ready_o,
 
     // WEIGHTS read and write
     // weights(weight&bias) read port with Conv
-    input                         weight_read_en_i,
-    input  [WEIT_ADDR_WIDTH -1:0] weight_read_addr_i,
-    output [WEIT_DATA_WIDTH -1:0] weight_read_data_o,
-    input                         bias_read_en_i,
-    input  [BIAS_ADDR_WIDTH -1:0] bias_read_addr_i,
-    output [BIAS_DATA_WIDTH -1:0] bias_read_data_o,
+    input                                   weight_read_en_i,
+    input [BANK_ADDR_WIDTH            -1:0] weight_read_addr_i,
+    output[CHL_PARA*BANK_UNIT_WIDTH*CHL_PARA -1:0] weight_read_data_o,
+    input                                   bias_read_en_i,
+    input [BANK_ADDR_WIDTH            -1:0] bias_read_addr_i,
+    output[1*BANK_UNIT_WIDTH*CHL_PARA -1:0] bias_read_data_o,
     // weights(weight&bias) write port with Load
-    input                         weight_write_en_i,
-    input  [WEIT_BANK_NUM   -1:0] weight_write_bank_i,
-    input  [WEIT_ADDR_WIDTH -1:0] weight_write_addr_i,
-    input  [WEIT_DATA_WIDTH -1:0] weight_write_data_i,
-    input                         bias_write_en_i,
-    input  [BIAS_BANK_NUM   -1:0] bias_write_bank_i,
-    input  [BIAS_ADDR_WIDTH -1:0] bias_write_addr_i,
-    input  [BIAS_DATA_WIDTH -1:0] bias_write_data_i
+    input                                   weight_write_en_i,
+    input [CHL_PARA                   -1:0] weight_write_bank_i,
+    input [BANK_ADDR_WIDTH            -1:0] weight_write_addr_i,
+    input [CHL_PARA*BANK_UNIT_WIDTH*CHL_PARA -1:0] weight_write_data_i,
+    input                                   bias_write_en_i,
+    input [1                          -1:0] bias_write_bank_i,
+    input [BANK_ADDR_WIDTH            -1:0] bias_write_addr_i,
+    input [1*BANK_UNIT_WIDTH*CHL_PARA -1:0] bias_write_data_i
 );
 
 

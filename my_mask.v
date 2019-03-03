@@ -4,11 +4,11 @@
 // Engineer: Kai Zhong
 // Email   : zhongk15@mails.tsinghua.edu.cn
 //
-// Create Date   : 2018.01.16
+// Create Date   : 2019.01.16
 // Module Name   : my_mask
 // Project Name  : dpu_v_1
 // Target Devices: KU115
-// Tool Versions : vivado 2017.3
+// Tool Versions : vivado 2017.1
 // Description   : it work as a mask and just apply its ctrl signal 
 //                 which is one-hot form to input_data with "and"
 //                 gates 
@@ -17,9 +17,9 @@
 // Revision      :
 // Modification History:
 // Date by Version Change Description
-//====================================
+//=====================================================================
 //
-//====================================
+//=====================================================================
 //
 ///////////////////////////////////////////////////////////////////////
 module my_mask #(

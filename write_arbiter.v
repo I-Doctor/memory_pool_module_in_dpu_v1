@@ -4,11 +4,11 @@
 // Engineer: Kai Zhong
 // Email   : zhongk15@mails.tsinghua.edu.cn
 //
-// Create Date   : 2018.01.16
+// Create Date   : 2019.01.16
 // Module Name   : write_abiter
 // Project Name  : dpu_v_1
 // Target Devices: KU115
-// Tool Versions : vivado 2017.3
+// Tool Versions : vivado 2017.1
 // Description   : receive wirte request to a specific group of memory 
 //                 pool from conv, dataloader, misc, then write data
 //                 to this group
@@ -18,9 +18,9 @@
 // Revision      :
 // Modification History:
 // Date by Version Change Description
-//====================================
+//=====================================================================
 //
-//====================================
+//=====================================================================
 //
 ///////////////////////////////////////////////////////////////////////
 module write_arbiter #(
