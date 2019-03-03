@@ -8,7 +8,7 @@
 // Module Name   : read_control
 // Project Name  : dpu_v_1
 // Target Devices: KU115
-// Tool Versions : vivado 2017.3
+// Tool Versions : vivado 2017.1
 // Description   : receive read request to on-chip image memory pool 
 //                 from conv, datasaver, misc, then read data from the 
 //                 right group and right bank of on-chip memory pool 
@@ -19,9 +19,10 @@
 // Revision      :
 // Modification History:
 // Date by Version Change Description
-//====================================
-//
-//====================================
+//=====================================================================
+// 2019.03.03    : change input and output localparam
+// 
+//=====================================================================
 //
 ///////////////////////////////////////////////////////////////////////
 module read_control #(
@@ -37,8 +38,8 @@ module read_control #(
 
    // image read port with Conv
     input  [IMG_GRP_NUM    -1:0] conv_read_group_id_i,
-    input  [IMG_BANK_NUM   -1:0] conv_read_bank_en_i,
-    input  [IMG_ADDR_WIDTH -1:0] conv_read_addr_i,
+    input  [ROW_PARA       -1:0] conv_read_bank_en_i,
+    input  [ROW_PARA* BANK_ADDR_WIDTH -1:0] conv_read_addr_i,
     output                       conv_read_addr_ready_o,
     output                       conv_read_data_valid_o,
     output [IMG_DATA_WIDTH -1:0] conv_read_data_o,
@@ -46,8 +47,8 @@ module read_control #(
 
     // image read port with MISC
     input  [IMG_GRP_NUM    -1:0] misc_read_group_id_i,
-    input  [IMG_BANK_NUM   -1:0] misc_read_bank_en_i,
-    input  [IMG_ADDR_WIDTH -1:0] misc_read_addr_i,
+    input  [ROW_PARA       -1:0] misc_read_bank_en_i,
+    input  [ROW_PARA* BANK_ADDR_WIDTH -1:0] misc_read_addr_i,
     output                       misc_read_addr_ready_o,
     output                       misc_read_data_valid_o,
     output [IMG_DATA_WIDTH -1:0] misc_read_data_o,
@@ -55,8 +56,8 @@ module read_control #(
     
     // image read port with Save
     input  [IMG_GRP_NUM    -1:0] save_read_group_id_i,
-    input  [IMG_BANK_NUM   -1:0] save_read_bank_en_i,
-    input  [IMG_ADDR_WIDTH -1:0] save_read_addr_i,
+    input  [ROW_PARA       -1:0] save_read_bank_en_i,
+    input  [ROW_PARA* BANK_ADDR_WIDTH -1:0] save_read_addr_i,
     output                       save_read_addr_ready_o,
     output                       save_read_data_valid_o,
     output [IMG_DATA_WIDTH -1:0] save_read_data_o,
@@ -64,7 +65,7 @@ module read_control #(
     
     // image read port with image memory pool (packaged)
     input  [IMG_GRP_NUM * IMG_DATA_WIDTH -1:0] read_data_i,
-    output [IMG_GRP_NUM * IMG_ADDR_WIDTH -1:0] read_addr_o,
+    output [IMG_GRP_NUM * ROW_PARA* BANK_ADDR_WIDTH -1:0] read_addr_o,
     output [IMG_GRP_NUM * IMG_BANK_NUM   -1:0] read_bank_en_o
 
     );

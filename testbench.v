@@ -8,7 +8,7 @@
 // Module Name   : testbench_mem_pool
 // Project Name  : dpu_v_1
 // Target Devices: KU115
-// Tool Versions : vivado 2017.3
+// Tool Versions : vivado 2017.1
 // Description   : generate test signal for mem_pool_top module to test
 // Dependencies  : 
 //                 contains mem_pool_top
@@ -16,9 +16,10 @@
 // Revision      :
 // Modification History:
 // Date by Version Change Description
-//====================================
+//=====================================================================
+// 2019.03.01    : change fwrite to fdisplay so that we get new line
 //
-//====================================
+//=====================================================================
 //
 ///////////////////////////////////////////////////////////////////////
 module testbench_mem_pool #(
@@ -350,7 +351,7 @@ begin
         @(posedge clk);
         if(conv_read_data_valid_o==1&&conv_read_data_ready_i==1) begin 
             conv_read_data_receive <= conv_read_data_o;
-            $fwrite(conv_receive_file, "%h", conv_read_data_o);
+            $fdisplay(conv_receive_file, "%h", conv_read_data_o);
             $display($time, " CONV receive %d",   conv_count);
             conv_count = conv_count + 1;
         end
@@ -371,7 +372,7 @@ begin
         @(posedge clk);
         if(misc_read_data_valid_o==1&&misc_read_data_ready_i==1) begin 
             misc_read_data_receive <= misc_read_data_o;
-            $fwrite(misc_receive_file, "%h", misc_read_data_o);
+            $fdisplay(misc_receive_file, "%h", misc_read_data_o);
             $display($time, " MISC receive %d",   misc_count);
             misc_count = misc_count + 1;
         end
@@ -392,7 +393,7 @@ begin
         @(posedge clk);
         if(save_read_data_valid_o==1&&save_read_data_ready_i==1) begin 
             save_read_data_receive <= save_read_data_o;
-            $fwrite(save_receive_file, "%h", save_read_data_o);
+            $fdisplay(save_receive_file, "%h", save_read_data_o);
             $display($time, " SAVE receive %d",   save_count);
             save_count = save_count + 1;
         end

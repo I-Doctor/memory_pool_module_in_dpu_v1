@@ -8,21 +8,22 @@
 // Module Name   : mem_pool_top
 // Project Name  : dpu_v_1
 // Target Devices: KU115
-// Tool Versions : vivado 2017.3
+// Tool Versions : vivado 2017.1
 // Description   : memory pool module, contains IMG_GRP_NUM image
 //                 block RAM groups, a weight group and a bias group.
 //                 There are read and write control to schedule the
 //                 image groups, and weight control to control others 
 // Dependencies  : utilized by dpu_top
-//                 contains read_control, write_control, weight_control
+//                 contains read_control, write_control, 
 //                 bram_group
 //                 parametered by dpu_top and 
 // Revision      :
 // Modification History:
 // Date by Version Change Description
-//====================================
+//=====================================================================
+// 2019.03.01    : correct wires connection
 //
-//====================================
+//=====================================================================
 //
 ///////////////////////////////////////////////////////////////////////
 
