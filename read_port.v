@@ -20,6 +20,7 @@
 // Modification History:
 // Date by Version Change Description
 //=====================================================================
+// 2019.03.04    : correct the logic of fifo_read_en and data_valid
 //
 //=====================================================================
 //
@@ -111,10 +112,24 @@ module read_port #(
     wire fifo_write_en;
     wire fifo_read_en;
     // assgin logic
+    // fifo_read_en's logic needs careful consideration with valid
     assign fifo_read_en  = ((~fifo_empty) && (~read_data_valid_o)) ||
                            ((~fifo_empty)       && 
                             (read_data_valid_o) &&
                             (read_data_ready_i));
+    // fifo_read_en =  --- fifo_empty 						0
+    //				    |
+    //					-- ~fifo_empty --- valid --- ready 	1
+    //									|		  |
+    //									|		  -- ~ready 0
+    //									-- ~valid           1
+    //
+    // valid <= --- read_en 						1
+    //			 |
+    //			 -- ~read_en --- valid --- ready    0
+    //						  |			|
+    //						  |			-- ~ready   1
+    //						  -- ~valid             0
     assign fifo_write_en = read_data_valid_group_2_i |
                            read_data_valid_group_1_i |
                            read_data_valid_group_0_i;
@@ -170,7 +185,11 @@ module read_port #(
             read_data_valid_r <= 1'b0;
         end
         else begin
-            read_data_valid_r <= fifo_read_en;
+            read_data_valid_r <= (fifo_read_en) || 
+            					 (   (~fifo_read_en) 
+            					   &&( read_data_valid_o)
+            					   &&(~read_data_ready_i)
+            					 );
         end
     end
     assign read_data_valid_o = read_data_valid_r;
