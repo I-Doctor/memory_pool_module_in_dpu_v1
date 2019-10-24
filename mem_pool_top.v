@@ -268,7 +268,7 @@ endgenerate
 
 
 //*******************************************************************
-// utilize and connect weight group
+// utilize and connect weit control bank mux
 //*******************************************************************
 wire [WEIT_BANK_NUM -1:0] weight_write_bank_en;
 wire [BIAS_BANK_NUM -1:0] bias_write_bank_en;
@@ -291,11 +291,16 @@ my_mux #(
     .output_data(bias_write_bank_en)
 );
 
+
+//*******************************************************************
+// utilize and connect weight group
+//*******************************************************************
 bram_group #(
     .BANK_NUM           (WEIT_BANK_NUM),
     .BANK_UNIT_NUM      (WEIT_UNIT_NUM),
     .BANK_ADDR_WIDTH    (BANK_ADDR_WIDTH),
-    .BANK_UNIT_WIDTH    (BANK_UNIT_WIDTH)
+    .BANK_UNIT_WIDTH    (BANK_UNIT_WIDTH),
+    .MEM_POOL_PRIMITIVE (MEM_POOL_PRIMITIVE)
 ) INST_weit_grp(
     .clk(clk),
     .rst_p(rst_p),
@@ -317,7 +322,8 @@ bram_group #(
     .BANK_NUM           (BIAS_BANK_NUM),
     .BANK_UNIT_NUM      (BIAS_UNIT_NUM),
     .BANK_ADDR_WIDTH    (BANK_ADDR_WIDTH),
-    .BANK_UNIT_WIDTH    (BANK_UNIT_WIDTH)
+    .BANK_UNIT_WIDTH    (BANK_UNIT_WIDTH),
+    .MEM_POOL_PRIMITIVE (MEM_POOL_PRIMITIVE)
 ) INST_bias_grp(
     .clk(clk),
     .rst_p(rst_p),
