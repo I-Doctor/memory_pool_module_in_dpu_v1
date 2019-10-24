@@ -22,18 +22,22 @@
 //=====================================================================
 // 2019.02.16    : correct wires connection
 // 2019.03.03    : solve input and output localparam problem 
-//
+// 2019.10.01    : add parameter weit-addr-width bias-addr-width and 
+//                 mem-pool-primitive
 //=====================================================================
 //
 ///////////////////////////////////////////////////////////////////////
 
 module mem_pool_top #(
-    parameter IMG_GRP_NUM       = 3,  // number of image memory group
-    parameter ROW_PARA          = 4,  // number of bank in image group
-    parameter COL_PARA          = 1,  // colomn parallize
-    parameter CHL_PARA          = 8,  // number of unit in a image bank
-    parameter BANK_ADDR_WIDTH   = 12, // width of address of a bank
-    parameter BANK_UNIT_WIDTH   = 8   // quantize bits width
+    parameter IMG_GRP_NUM       = 3,    // number of image memory group
+    parameter ROW_PARA          = 4,    // number of bank in image group
+    parameter COL_PARA          = 1,    // colomn parallize
+    parameter CHL_PARA          = 8,    // number of unit in a image bank
+    parameter BANK_ADDR_WIDTH   = 12,   // width of address of image bank
+    parameter WEIT_ADDR_WIDTH   = 12,   // width of address of weight bank
+    parameter BIAS_ADDR_WIDTH   = 8,    // width of address of bias bank
+    parameter BANK_UNIT_WIDTH   = 8,    // quantize bits width
+    parameter MEM_POOL_PRIMITIVE= "ultra" //"ultra","b","d","auto"
 )(
     input clk,
     input rst_p,
@@ -109,7 +113,6 @@ module mem_pool_top #(
 //*******************************************************************
 // parameters begin with BANK or end with PARA is baisc and 
 // which begin with IMG/WEIT/BIAS are specific
-localparam BANK_DEPTH      = 2 ** BANK_ADDR_WIDTH;
 
 // IMG: IMG_GRP_NUM groups, ROW_PARA banks, CHL_PARA units
 // individual addr: BANK_NUM * BANK_ADDR_WIDTH
@@ -118,7 +121,6 @@ localparam IMG_UNIT_NUM    = CHL_PARA;
 localparam IMG_BANK_WIDTH  = BANK_UNIT_WIDTH * IMG_UNIT_NUM;// IMG bank
 localparam IMG_DATA_WIDTH  = IMG_BANK_NUM * IMG_BANK_WIDTH; // IMG data
 localparam IMG_ADDR_WIDTH  = IMG_BANK_NUM * BANK_ADDR_WIDTH;// IMG addr
-localparam IMG_BANK_SIZE   = IMG_BANK_WIDTH * BANK_DEPTH;
 
 // WEIT: 1 groups, CHL_PARA banks, CHL_PARA units
 // all same addr: 1 * BANK_ADDR_WIDTH
@@ -126,8 +128,6 @@ localparam WEIT_BANK_NUM   = CHL_PARA;
 localparam WEIT_UNIT_NUM   = CHL_PARA;
 localparam WEIT_BANK_WIDTH = BANK_UNIT_WIDTH * WEIT_UNIT_NUM;//WEITbank
 localparam WEIT_DATA_WIDTH = WEIT_BANK_NUM * WEIT_BANK_WIDTH;//WEITdata
-localparam WEIT_ADDR_WIDTH = 1 * BANK_ADDR_WIDTH;            //WEITaddr
-localparam WEIT_BANK_SIZE  = WEIT_BANK_WIDTH * BANK_DEPTH;
 
 // BIAS: 1 groups, 1 banks, CHL_PARA units
 // all same addr: 1 * BANK_ADDR_WIDTH
@@ -135,8 +135,6 @@ localparam BIAS_BANK_NUM   = 1;
 localparam BIAS_UNIT_NUM   = CHL_PARA;
 localparam BIAS_BANK_WIDTH = BANK_UNIT_WIDTH * BIAS_UNIT_NUM;//BIASbank
 localparam BIAS_DATA_WIDTH = BIAS_BANK_NUM * BIAS_BANK_WIDTH;//BIASdata
-localparam BIAS_ADDR_WIDTH = 1 * BANK_ADDR_WIDTH;            //BIASaddr
-localparam BIAS_BANK_SIZE  = BIAS_BANK_WIDTH * BANK_DEPTH;
 
 
 //*******************************************************************
@@ -235,10 +233,6 @@ write_control #(
 
 
 //*******************************************************************
-// utilize and connect weight control
-//*******************************************************************
-
-//*******************************************************************
 // utilize and connect image groups
 //*******************************************************************
 generate
@@ -249,7 +243,8 @@ generate
             .BANK_NUM           (IMG_BANK_NUM),
             .BANK_UNIT_NUM      (IMG_UNIT_NUM),
             .BANK_ADDR_WIDTH    (BANK_ADDR_WIDTH),
-            .BANK_UNIT_WIDTH    (BANK_UNIT_WIDTH)
+            .BANK_UNIT_WIDTH    (BANK_UNIT_WIDTH),
+            .MEM_POOL_PRIMITIVE (MEM_POOL_PRIMITIVE)
         ) INST_img_grp(
             .clk(clk),
             .rst_p(rst_p),

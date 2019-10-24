@@ -19,7 +19,8 @@
 // Modification History:
 // Date by Version Change Description
 //=====================================================================
-//
+// 2019.10.01: add parameter MEM_POOL_PRIMITIVE; change order to 
+//             read_first
 //=====================================================================
 //
 ///////////////////////////////////////////////////////////////////////
@@ -27,7 +28,8 @@ module bram_group #(
     parameter BANK_NUM          = 4,
     parameter BANK_UNIT_NUM     = 8,
     parameter BANK_ADDR_WIDTH   = 12,
-    parameter BANK_UNIT_WIDTH   = 8
+    parameter BANK_UNIT_WIDTH   = 8,
+    parameter MEM_POOL_PRIMITIVE= "ultra" //"ultra","b","d","auto"
 )(
     input clk,
     input rst_p,
@@ -59,26 +61,26 @@ generate
         // Xilinx Parameterized Macro, Version 2017.1
         xpm_memory_sdpram # (
             // Common module parameters
-            .MEMORY_SIZE        (BANK_SIZE),       //size of bank
-            .MEMORY_PRIMITIVE   ("auto"),          //choose "d" "b" "u"
-            .CLOCKING_MODE      ("common_clock"),  //a,b use one clock 
-            .MEMORY_INIT_FILE   ("none"),          //no init
-            .MEMORY_INIT_PARAM  (""    ),          //no init
+            .MEMORY_SIZE        (BANK_SIZE),            //size of bank
+            .MEMORY_PRIMITIVE   (MEM_POOL_PRIMITIVE),   //choose "d" "b" "u"
+            .CLOCKING_MODE      ("common_clock"),       //a,b use one clock 
+            .MEMORY_INIT_FILE   ("none"),               //no init
+            .MEMORY_INIT_PARAM  (""    ),               //no init
             .USE_MEM_INIT       (1),
-            .WAKEUP_TIME        ("disable_sleep"), //no sleep
+            .WAKEUP_TIME        ("disable_sleep"),      //no sleep
             .MESSAGE_CONTROL    (0),
-            .ECC_MODE           ("no_ecc"),        //no ecc
-            .AUTO_SLEEP_TIME    (0),               //Do not Change
+            .ECC_MODE           ("no_ecc"),             //no ecc
+            .AUTO_SLEEP_TIME    (0),                    //Do not Change
             // Port A module parameters
-            .WRITE_DATA_WIDTH_A (BANK_DATA_WIDTH), //bank data width
-            .BYTE_WRITE_WIDTH_A (BANK_DATA_WIDTH), //not byte write 
-            .ADDR_WIDTH_A       (BANK_ADDR_WIDTH), //addr width
+            .WRITE_DATA_WIDTH_A (BANK_DATA_WIDTH),  //bank data width
+            .BYTE_WRITE_WIDTH_A (BANK_DATA_WIDTH),  //not byte write 
+            .ADDR_WIDTH_A       (BANK_ADDR_WIDTH),  //addr width
             // Port B module parameters
-            .READ_DATA_WIDTH_B  (BANK_DATA_WIDTH), //bank data width
-            .ADDR_WIDTH_B       (BANK_ADDR_WIDTH), //addr width
+            .READ_DATA_WIDTH_B  (BANK_DATA_WIDTH),  //bank data width
+            .ADDR_WIDTH_B       (BANK_ADDR_WIDTH),  //addr width
             .READ_RESET_VALUE_B ("0"),
-            .READ_LATENCY_B     (2),               //latency cycles
-            .WRITE_MODE_B       ("no_change")      //no change order
+            .READ_LATENCY_B     (2),                //latency cycles
+            .WRITE_MODE_B       ("read_first")      //no change order
         ) INST_sdpram_bank (
             // Common module ports
             .sleep          (1'b0),
