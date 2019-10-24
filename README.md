@@ -11,3 +11,6 @@ change the represent of input and output bit-width to solve the localparam probl
 
 + **version 1.4   &emsp;  2019.03.04**  
 correct the logic of fifo_read_en and read_data_valid in module read_port
+
++ **version 1.5   &emsp;  2019.08.01**  
+add weight and bias bank address width parameter; add ram primitive parameter
